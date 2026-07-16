@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -77,6 +78,25 @@
             box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); 
             border-color: var(--neon-cyan); 
         }
+		/* --- PERBAIKAN WARNA PUTIH PADA DROPDOWN & AUTOFILL --- */
+        
+        /* Mengubah daftar pilihan (dropdown) menjadi gelap senada dengan tema */
+        select option {
+            background-color: #0f172a !important; /* Warna navy gelap bawaan tema */
+            color: var(--text-main) !important;
+        }
+
+        /* Menghilangkan background putih saat browser melakukan Autofill */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        select:-webkit-autofill,
+        select:-webkit-autofill:hover,
+        select:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0px 1000px #030712 inset !important; /* Menutup warna putih autofill */
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-text-fill-color: #fff !important;
+        }
         .form-control::placeholder { color: #64748b; }
         .input-group-text { background: var(--glass-input); border: 1px solid var(--glass-border); color: var(--text-muted); }
 
@@ -96,6 +116,8 @@
         .btn-success:hover { box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); transform: translateY(-2px); }
         .btn-light { background: var(--glass-input); color: var(--text-main); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
         .btn-light:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); }
+        .btn-warning { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); border: none; box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
+        .btn-warning:hover { box-shadow: 0 0 25px rgba(251, 191, 36, 0.6); transform: translateY(-2px); }
         
         /* NEON BADGES */
         .badge-baru { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid #34d399; padding: 5px 10px; border-radius: 8px; font-weight: 700; text-shadow: 0 0 5px #34d399; }
@@ -222,7 +244,10 @@
                 <div class="d-flex gap-2 mb-3">
                     <button class="btn btn-light shadow-sm px-4" onclick="loadDataFromSheets()" title="Sinkronisasi Server"><i class="bi bi-arrow-repeat text-glow-cyan fs-5"></i></button>
                     <button class="btn btn-light flex-grow-1" onclick="startScanner()"><i class="bi bi-qr-code-scan me-2 text-glow-gold"></i>Scan Barcode</button>
+                    <!-- Tombol Tambah Master Data -->
                     <button class="btn btn-success flex-grow-1 fw-bold" data-bs-toggle="modal" data-bs-target="#addStockModal"><i class="bi bi-plus-lg me-2"></i>Tambah Entri Baru</button>
+                    <!-- Tombol Baru: Update Stok -->
+                    <button class="btn btn-warning flex-grow-1 fw-bold text-dark" data-bs-toggle="modal" data-bs-target="#updateStockModal" onclick="prepareUpdateStock()"><i class="bi bi-box-seam me-2"></i>Update Stok</button>
                 </div>
                 
                 <div id="reader" style="display: none; border-radius: 16px; overflow: hidden; margin-bottom: 15px; border: 1px solid var(--neon-cyan); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);"></div>
@@ -408,6 +433,37 @@
     </div>
 </div>
 
+<!-- MODAL UPDATE STOK -->
+<div class="modal fade" id="updateStockModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-4 py-3" style="border-bottom: 1px solid var(--neon-gold);">
+                <h5 class="modal-title fw-bold text-glow-gold" style="letter-spacing: 1px;"><i class="bi bi-box-seam me-2"></i>Update Stok Barang</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="updateStockForm" onsubmit="submitUpdateStock(event)">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">PILIH BARANG</label>
+                        <select id="uProductId" class="form-select" required onchange="showCurrentStock()">
+                            <option value="">-- Memuat Data Barang --</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">STOK SAAT INI</label>
+                        <input type="number" id="uCurrentStock" class="form-control fw-bold" style="background: transparent !important;" readonly disabled>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">TAMBAH STOK BARU (+)</label>
+                        <input type="number" id="uAddStock" class="form-control fw-bold text-glow-cyan" required min="1" placeholder="Masukkan jumlah stok tambahan" style="font-size: 18px; background: transparent !important;">
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100 py-3 fw-bold fs-6 text-dark" style="letter-spacing: 1px;"><i class="bi bi-cloud-arrow-up-fill me-2"></i>SINKRONISASI UPDATE KE SERVER</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL DETAIL TRANSAKSI -->
 <div class="modal fade" id="detailModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -456,7 +512,7 @@
 <!-- BOOTSTRAP & LOGIC JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgOU2Z6FPNUFRIUX3V4ttA31-n9UudUjgU7-lH4Fvq1HXuzw3JJK5G9BHpg6mNM0k8/exec"; 
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxmAgEfdbGC94GoAPI7zAEk275w0VNNng6gGr2qLlt_rqmIs9E54U_f4GPYo6IUtPA-/exec"; 
 
     let currentUser = ""; let users = {}; let products = []; let transactions = []; let cart = []; let currentCategory = 'all'; 
     const formatRupiah = (num) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(num);
@@ -791,6 +847,161 @@
     async function saveProduct(e) { e.preventDefault(); const newProduct = { id: Date.now(), name: document.getElementById('pName').value, barcode: document.getElementById('pBarcode').value, price: parseFloat(document.getElementById('pPrice').value), type: document.getElementById('pType').value, stock: parseInt(document.getElementById('pStock').value) }; toggleLoader(true, "MENYIMPAN KE SERVER..."); try { const response = await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "addProduct", product: newProduct }) }); const result = await response.json(); if (result.status === "success") { products.push(newProduct); renderProducts(); document.getElementById('productForm').reset(); bootstrap.Modal.getInstance(document.getElementById('addStockModal')).hide(); Swal.fire({ title: 'TERSIMPAN!', icon: 'success', timer: 1500, showConfirmButton: false, background: 'rgba(15,23,42,0.9)', color: '#fff' }); } else { Swal.fire({title: 'Gagal', text: result.message, icon:'error', background: 'rgba(15,23,42,0.9)', color: '#fff'}); } } catch (error) { Swal.fire({title: 'Error Koneksi', text:'Jaringan terputus.', icon:'error', background: 'rgba(15,23,42,0.9)', color: '#fff'}); } finally { toggleLoader(false); } }
 
     let html5QrcodeScanner = null; function startScanner() { const readerDiv = document.getElementById('reader'); readerDiv.style.display = readerDiv.style.display === 'block' ? 'none' : 'block'; if(!html5QrcodeScanner && readerDiv.style.display === 'block') { html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 }); html5QrcodeScanner.render((decodedText) => { const p = products.find(x => x.barcode === decodedText); if(p) { addToCart(p.id); Swal.fire({title:'TERDETEKSI!', toast:true, position:'top-end', icon:'success', timer:1000, showConfirmButton:false, background: 'rgba(15,23,42,0.9)', color: '#fff'}); } else { Swal.fire({title:'KODE TIDAK VALID', toast:true, position:'top-end', icon:'error', timer:1500, showConfirmButton:false, background: 'rgba(15,23,42,0.9)', color: '#fff'}); } }, () => {}); } }
+
+    // FUNGSI BARU: Persiapan Modal Update Stok
+    function prepareUpdateStock() {
+        const select = document.getElementById('uProductId');
+        select.innerHTML = '<option value="">-- Pilih Barang --</option>';
+        
+        // Urutkan alfabetis agar mudah dicari
+        const sortedProducts = [...products].sort((a, b) => a.name.localeCompare(b.name));
+        
+        sortedProducts.forEach(p => {
+            select.innerHTML += `<option value="${p.id}">${p.name} (Stok: ${p.stock})</option>`;
+        });
+        
+        document.getElementById('uCurrentStock').value = '';
+        document.getElementById('uAddStock').value = '';
+    }
+
+    // FUNGSI BARU: Menampilkan stok saat ini ketika barang dipilih
+    function showCurrentStock() {
+        const id = document.getElementById('uProductId').value;
+        if(!id) {
+            document.getElementById('uCurrentStock').value = '';
+            return;
+        }
+        const product = products.find(p => p.id == id);
+        if(product) {
+            document.getElementById('uCurrentStock').value = product.stock;
+        }
+    }
+
+    // FUNGSI BARU: Proses submit data ke Google Apps Script
+    async function submitUpdateStock(e) {
+        e.preventDefault();
+        const id = parseInt(document.getElementById('uProductId').value);
+        const addedStock = parseInt(document.getElementById('uAddStock').value);
+        
+        if(!id || isNaN(addedStock) || addedStock <= 0) return;
+        
+        const productIndex = products.findIndex(p => p.id === id);
+        if(productIndex === -1) return;
+        
+        const currentStock = products[productIndex].stock;
+        const newStock = currentStock + addedStock;
+        
+        toggleLoader(true, "MENGUPDATE STOK KE SERVER...");
+        
+        try {
+            const payload = {
+                action: "updateStock", 
+                product: { 
+                    id: products[productIndex].id,
+                    newStock: newStock
+                }
+            };
+            
+            const response = await fetch(WEB_APP_URL, { 
+                method: "POST", 
+                body: JSON.stringify(payload) 
+            });
+            const result = await response.json();
+            
+            if (result.status === "success") { 
+                products[productIndex].stock = newStock;
+                renderProducts(); // Render ulang kartu produk
+                
+                document.getElementById('updateStockForm').reset(); 
+                bootstrap.Modal.getInstance(document.getElementById('updateStockModal')).hide(); 
+                
+                Swal.fire({ title: 'STOK DIUPDATE!', text: `Stok baru: ${newStock}`, icon: 'success', timer: 2000, showConfirmButton: false, background: 'rgba(15,23,42,0.9)', color: '#fff' }); 
+            } else { 
+                Swal.fire({title: 'Gagal', text: result.message, icon:'error', background: 'rgba(15,23,42,0.9)', color: '#fff'}); 
+            }
+        } catch (error) { 
+            Swal.fire({title: 'Error Koneksi', text:'Jaringan terputus, gagal mengupdate stok.', icon:'error', background: 'rgba(15,23,42,0.9)', color: '#fff'}); 
+        } finally { 
+            toggleLoader(false); 
+        }
+    }
+	// Fungsi untuk menyiapkan opsi barang saat modal Update dibuka
+function prepareUpdateStock() {
+    const select = document.getElementById('uProductId');
+    select.innerHTML = '<option value="">-- Pilih Barang --</option>';
+    
+    // Urutkan alfabetis agar mudah dicari
+    const sortedProducts = [...products].sort((a, b) => a.name.localeCompare(b.name));
+    
+    sortedProducts.forEach(p => {
+        select.innerHTML += `<option value="${p.id}">${p.name} (Stok: ${p.stock})</option>`;
+    });
+    
+    document.getElementById('uCurrentStock').value = '';
+    document.getElementById('uAddStock').value = '';
+}
+
+// Menampilkan stok saat ini ketika barang dipilih
+function showCurrentStock() {
+    const id = document.getElementById('uProductId').value;
+    if(!id) {
+        document.getElementById('uCurrentStock').value = '';
+        return;
+    }
+    const product = products.find(p => p.id == id);
+    if(product) {
+        document.getElementById('uCurrentStock').value = product.stock;
+    }
+}
+
+// Proses submit data ke Google Apps Script
+async function submitUpdateStock(e) {
+    e.preventDefault();
+    const id = parseInt(document.getElementById('uProductId').value);
+    const addedStock = parseInt(document.getElementById('uAddStock').value);
+    
+    if(!id || isNaN(addedStock) || addedStock <= 0) return;
+    
+    const productIndex = products.findIndex(p => p.id === id);
+    if(productIndex === -1) return;
+    
+    const currentStock = products[productIndex].stock;
+    const newStock = currentStock + addedStock;
+    
+    toggleLoader(true, "MENGUPDATE STOK KE SERVER...");
+    
+    try {
+        const payload = {
+            action: "updateStock", 
+            product: { 
+                id: products[productIndex].id,
+                newStock: newStock
+            }
+        };
+        
+        const response = await fetch(WEB_APP_URL, { 
+            method: "POST", 
+            body: JSON.stringify(payload) 
+        });
+        const result = await response.json();
+        
+        if (result.status === "success") { 
+            products[productIndex].stock = newStock;
+            renderProducts(); // Render ulang kartu produk
+            
+            document.getElementById('updateStockForm').reset(); 
+            bootstrap.Modal.getInstance(document.getElementById('updateStockModal')).hide(); 
+            
+            Swal.fire({ title: 'STOK DIUPDATE!', text: `Stok baru: ${newStock}`, icon: 'success', timer: 2000, showConfirmButton: false, background: 'rgba(15,23,42,0.9)', color: '#fff' }); 
+        } else { 
+            Swal.fire({title: 'Gagal', text: result.message, icon:'error', background: 'rgba(15,23,42,0.9)', color: '#fff'}); 
+        }
+    } catch (error) { 
+        Swal.fire({title: 'Error Koneksi', text:'Jaringan terputus, gagal mengupdate stok.', icon:'error', background: 'rgba(15,23,42,0.9)', color: '#fff'}); 
+    } finally { 
+        toggleLoader(false); 
+    }
+}
 </script>
 </body>
 </html>
