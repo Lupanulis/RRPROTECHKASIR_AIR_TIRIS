@@ -1,18 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RR PRO TECH (Air Tiris Depan Masjid AL-Muhajirin)</title>
-    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Google Fonts: Space Grotesk (Futuristic) -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- HTML5 QRCode -->
     <script src="https://unpkg.com/html5-qrcode"></script>
     
     <style>
@@ -117,6 +113,8 @@
         .btn-light:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); }
         .btn-warning { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); border: none; box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
         .btn-warning:hover { box-shadow: 0 0 25px rgba(251, 191, 36, 0.6); transform: translateY(-2px); }
+        .btn-info { background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); border: none; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+        .btn-info:hover { box-shadow: 0 0 25px rgba(0, 242, 254, 0.6); transform: translateY(-2px); }
         
         /* NEON BADGES */
         .badge-baru { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid #34d399; padding: 5px 10px; border-radius: 8px; font-weight: 700; text-shadow: 0 0 5px #34d399; }
@@ -198,7 +196,6 @@
     <span class="mt-3 fw-bold text-glow-cyan" id="loaderText" style="letter-spacing: 2px;">MENGINISIALISASI SISTEM...</span>
 </div>
 
-<!-- HALAMAN LOGIN -->
 <div id="loginPage">
     <div class="login-box">
         <div class="mb-4 d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 70px; height: 70px; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple)); box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);">
@@ -220,7 +217,6 @@
     </div>
 </div>
 
-<!-- APLIKASI UTAMA -->
 <div id="mainApp" style="display: none;">
     <div class="nav-menu shadow-lg">
         <div class="d-flex align-items-center">
@@ -237,16 +233,14 @@
     </div>
 
     <div class="container-fluid px-4">
-        <!-- ================= MENU 1: KASIR ================= -->
         <div id="page-kasir" class="row g-4">
             <div class="col-lg-7">
-                <div class="d-flex gap-2 mb-3">
+                <div class="d-flex gap-2 mb-3 flex-wrap">
                     <button class="btn btn-light shadow-sm px-4" onclick="loadDataFromSheets()" title="Sinkronisasi Server"><i class="bi bi-arrow-repeat text-glow-cyan fs-5"></i></button>
                     <button class="btn btn-light flex-grow-1" onclick="startScanner()"><i class="bi bi-qr-code-scan me-2 text-glow-gold"></i>Scan Barcode</button>
-                    <!-- Tombol Tambah Master Data -->
                     <button class="btn btn-success flex-grow-1 fw-bold" data-bs-toggle="modal" data-bs-target="#addStockModal"><i class="bi bi-plus-lg me-2"></i>Tambah Entri Baru</button>
-                    <!-- Tombol Baru: Update Stok -->
                     <button class="btn btn-warning flex-grow-1 fw-bold text-dark" data-bs-toggle="modal" data-bs-target="#updateStockModal" onclick="prepareUpdateStock()"><i class="bi bi-box-seam me-2"></i>Update Stok</button>
+                    <button class="btn btn-info flex-grow-1 fw-bold text-dark" data-bs-toggle="modal" data-bs-target="#customSaleModal"><i class="bi bi-pencil-square me-2"></i>Jual Bebas</button>
                 </div>
                 
                 <div id="reader" style="display: none; border-radius: 16px; overflow: hidden; margin-bottom: 15px; border: 1px solid var(--neon-cyan); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);"></div>
@@ -270,7 +264,6 @@
                 <div class="row g-3" id="productList" style="max-height: 55vh; overflow-y: auto; padding-right: 5px;"></div>
             </div>
 
-            <!-- KERANJANG PEMBELIAN -->
             <div class="col-lg-5">
                 <div class="card p-4 h-100" style="border: 1px solid var(--neon-cyan) !important;">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom" style="border-color: var(--glass-border) !important;">
@@ -329,7 +322,6 @@
             </div>
         </div>
 
-        <!-- ================= MENU 2: LAPORAN ================= -->
         <div id="page-laporan" style="display: none;">
             <div class="card p-4">
                 <div class="row align-items-center mb-4 g-3">
@@ -399,7 +391,6 @@
     </div>
 </div>
 
-<!-- MODAL TAMBAH STOK -->
 <div class="modal fade" id="addStockModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -432,8 +423,6 @@
     </div>
 </div>
 
-<!-- MODAL UPDATE STOK -->
-<!-- MODAL UPDATE STOK -->
 <div class="modal fade" id="updateStockModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -445,41 +434,10 @@
                 <form id="updateStockForm" onsubmit="submitUpdateStock(event)">
                     <div class="mb-3">
                         <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">CARI BARANG</label>
-                        <!-- KOTAK PENCARIAN BARU -->
                         <input type="text" id="uSearchInput" class="form-control mb-2" placeholder="🔍 Ketik nama barang..." oninput="renderProductOptions()">
                         
                         <select id="uProductId" class="form-select" required onchange="showCurrentStock()">
                             <option value="">-- Pilih Barang --</option>
-                        </select>
-                    </div>
-                    <!-- ... sisanya sama seperti kode sebelumnya ... -->
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">STOK SAAT INI</label>
-                        <input type="number" id="uCurrentStock" class="form-control fw-bold" style="background: transparent !important;" readonly disabled>
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">TAMBAH STOK BARU (+)</label>
-                        <input type="number" id="uAddStock" class="form-control fw-bold text-glow-cyan" required min="1" placeholder="Masukkan jumlah stok tambahan" style="font-size: 18px; background: transparent !important;">
-                    </div>
-                    <button type="submit" class="btn btn-warning w-100 py-3 fw-bold fs-6 text-dark" style="letter-spacing: 1px;"><i class="bi bi-cloud-arrow-up-fill me-2"></i>SINKRONISASI UPDATE KE SERVER</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="updateStockModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header px-4 py-3" style="border-bottom: 1px solid var(--neon-gold);">
-                <h5 class="modal-title fw-bold text-glow-gold" style="letter-spacing: 1px;"><i class="bi bi-box-seam me-2"></i>Update Stok Barang</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <form id="updateStockForm" onsubmit="submitUpdateStock(event)">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">PILIH BARANG</label>
-                        <select id="uProductId" class="form-select" required onchange="showCurrentStock()">
-                            <option value="">-- Memuat Data Barang --</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -497,7 +455,34 @@
     </div>
 </div>
 
-<!-- MODAL DETAIL TRANSAKSI -->
+<div class="modal fade" id="customSaleModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-4 py-3" style="border-bottom: 1px solid var(--neon-cyan);">
+                <h5 class="modal-title fw-bold text-glow-cyan" style="letter-spacing: 1px;"><i class="bi bi-pencil-square me-2"></i>Input Jual Bebas / Servis</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="customSaleForm" onsubmit="submitCustomSale(event)">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">NAMA BARANG / JASA</label>
+                        <input type="text" id="cName" class="form-control" required placeholder="Contoh: Jasa Servis LCD, Softcase (Non-DB)">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">KUANTITAS</label>
+                        <input type="number" id="cQty" class="form-control" required min="1" value="1">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">HARGA SATUAN (Rp)</label>
+                        <input type="number" id="cPrice" class="form-control fw-bold text-glow-gold" required placeholder="0" style="font-size: 18px;">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-6" style="letter-spacing: 1px;"><i class="bi bi-cart-plus-fill me-2"></i>MASUKKAN KE TRANSAKSI</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="detailModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
@@ -510,7 +495,6 @@
     </div>
 </div>
 
-<!-- HALAMAN STRUK (Tetap Putih Untuk Printer Thermal) -->
 <div id="receiptPage">
     <div style="text-align: center; border-bottom: 1px dashed #000; padding-bottom: 15px; margin-bottom: 15px;">
         <h2 style="margin:0; font-family: sans-serif; font-weight: 800; letter-spacing: -0.5px;">RR PRO TECH (Air Tiris Depan Masjid AL-Muhajirin)</h2>
@@ -542,7 +526,6 @@
     </div>
 </div>
 
-<!-- BOOTSTRAP & LOGIC JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxmAgEfdbGC94GoAPI7zAEk275w0VNNng6gGr2qLlt_rqmIs9E54U_f4GPYo6IUtPA-/exec"; 
@@ -636,17 +619,48 @@
         product.stock -= 1; renderProducts(); updateCart();
     }
 
+    // MODIFIKASI FUNGSI: Mendukung penambahan/pengurangan Jual Bebas
     function changeQty(index, delta) {
-        const item = cart[index]; const product = products.find(p => p.id === item.id);
-        if (delta === 1) { if (product.stock <= 0) return; item.qty += 1; product.stock -= 1; } 
-        else if (delta === -1) { item.qty -= 1; product.stock += 1; if (item.qty === 0) cart.splice(index, 1); }
-        renderProducts(); updateCart();
+        const item = cart[index];
+        
+        if (item.isCustom) {
+            if (delta === 1) { 
+                item.qty += 1; 
+            } else if (delta === -1) { 
+                item.qty -= 1; 
+                if (item.qty === 0) cart.splice(index, 1); 
+            }
+        } else {
+            const product = products.find(p => p.id === item.id);
+            if (delta === 1) { 
+                if (product.stock <= 0) return; 
+                item.qty += 1; 
+                product.stock -= 1; 
+            } else if (delta === -1) { 
+                item.qty -= 1; 
+                product.stock += 1; 
+                if (item.qty === 0) cart.splice(index, 1); 
+            }
+        }
+        renderProducts(); 
+        updateCart();
     }
 
+    // MODIFIKASI FUNGSI: Mendukung pengosongan sesi dengan Jual Bebas
     function clearCart() {
         if(cart.length === 0) return;
         Swal.fire({ title: 'Hapus Sesi?', icon: 'warning', showCancelButton: true, background: 'rgba(15,23,42,0.9)', color: '#fff' }).then((res) => {
-            if(res.isConfirmed) { cart.forEach(item => { const p = products.find(p => p.id === item.id); if(p) p.stock += item.qty; }); cart = []; renderProducts(); updateCart(); }
+            if(res.isConfirmed) { 
+                cart.forEach(item => { 
+                    if (!item.isCustom) {
+                        const p = products.find(p => p.id === item.id); 
+                        if(p) p.stock += item.qty; 
+                    }
+                }); 
+                cart = []; 
+                renderProducts(); 
+                updateCart(); 
+            }
         });
     }
 
@@ -684,11 +698,22 @@
         const cartList = document.getElementById('cartList'); cartList.innerHTML = ''; let subtotal = 0;
         cart.forEach((item, index) => {
             subtotal += item.price * item.qty;
+            let customBadge = item.isCustom ? `<span class="badge bg-info ms-2" style="font-size: 8px;">BEBAS</span>` : '';
+            
             cartList.innerHTML += `
                 <li class="list-group-item p-3 mb-2 text-white">
-                    <div class="d-flex justify-content-between align-items-center mb-2"><span class="fw-bold text-white text-truncate" style="font-size:13px; max-width: 60%;">${item.name}</span><span class="fw-bold text-glow-gold" style="font-size:14px;">${formatRupiah(item.price * item.qty)}</span></div>
-                    <div class="d-flex justify-content-between align-items-center"><small class="text-muted" style="font-size:11px;">@ ${formatRupiah(item.price)}</small>
-                    <div class="input-group input-group-sm" style="width: 100px;"><button class="btn btn-outline-info py-0 px-2 fw-bold" type="button" onclick="changeQty(${index}, -1)">-</button><span class="form-control text-center py-1 px-1 fw-bold text-white" style="font-size:13px; background: rgba(0,0,0,0.5) !important;">${item.qty}</span><button class="btn btn-outline-info py-0 px-2 fw-bold" type="button" onclick="changeQty(${index}, 1)">+</button></div></div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold text-white text-truncate" style="font-size:13px; max-width: 60%;">${item.name} ${customBadge}</span>
+                        <span class="fw-bold text-glow-gold" style="font-size:14px;">${formatRupiah(item.price * item.qty)}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted" style="font-size:11px;">@ ${formatRupiah(item.price)}</small>
+                        <div class="input-group input-group-sm" style="width: 100px;">
+                            <button class="btn btn-outline-info py-0 px-2 fw-bold" type="button" onclick="changeQty(${index}, -1)">-</button>
+                            <span class="form-control text-center py-1 px-1 fw-bold text-white" style="font-size:13px; background: rgba(0,0,0,0.5) !important;">${item.qty}</span>
+                            <button class="btn btn-outline-info py-0 px-2 fw-bold" type="button" onclick="changeQty(${index}, 1)">+</button>
+                        </div>
+                    </div>
                 </li>`;
         });
 
@@ -881,41 +906,28 @@
 
     let html5QrcodeScanner = null; function startScanner() { const readerDiv = document.getElementById('reader'); readerDiv.style.display = readerDiv.style.display === 'block' ? 'none' : 'block'; if(!html5QrcodeScanner && readerDiv.style.display === 'block') { html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 }); html5QrcodeScanner.render((decodedText) => { const p = products.find(x => x.barcode === decodedText); if(p) { addToCart(p.id); Swal.fire({title:'TERDETEKSI!', toast:true, position:'top-end', icon:'success', timer:1000, showConfirmButton:false, background: 'rgba(15,23,42,0.9)', color: '#fff'}); } else { Swal.fire({title:'KODE TIDAK VALID', toast:true, position:'top-end', icon:'error', timer:1500, showConfirmButton:false, background: 'rgba(15,23,42,0.9)', color: '#fff'}); } }, () => {}); } }
 
-    // FUNGSI BARU: Persiapan Modal Update Stok
-    // Fungsi baru untuk merender daftar barang berdasarkan filter pencarian
-function renderProductOptions() {
-    const query = document.getElementById('uSearchInput').value.toLowerCase();
-    const select = document.getElementById('uProductId');
-    
-    // Simpan nilai pilihan sebelumnya jika ada
-    const currentValue = select.value;
-    
-    // Filter produk
-    const filtered = products.filter(p => p.name.toLowerCase().includes(query));
-    
-    // Reset dropdown
-    select.innerHTML = '<option value="">-- Pilih Barang --</option>';
-    
-    filtered.forEach(p => {
-        select.innerHTML += `<option value="${p.id}">${p.name} (Stok: ${p.stock})</option>`;
-    });
-
-    // Kembalikan pilihan jika ada dalam hasil filter (opsional)
-    if(filtered.find(p => p.id == currentValue)) {
-        select.value = currentValue;
+    // --- FUNGSI UPDATE STOK (Sudah Dirapikan & Dilengkapi Pencarian) ---
+    function renderProductOptions() {
+        const query = document.getElementById('uSearchInput').value.toLowerCase();
+        const select = document.getElementById('uProductId');
+        const currentValue = select.value;
+        const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+        select.innerHTML = '<option value="">-- Pilih Barang --</option>';
+        filtered.forEach(p => {
+            select.innerHTML += `<option value="${p.id}">${p.name} (Stok: ${p.stock})</option>`;
+        });
+        if(filtered.find(p => p.id == currentValue)) {
+            select.value = currentValue;
+        }
     }
-}
 
-	// Fungsi prepareUpdateStock yang diupdate
-	function prepareUpdateStock() {
-    document.getElementById('uSearchInput').value = ''; // Reset pencarian
-    renderProductOptions(); // Jalankan render awal
-    
-    document.getElementById('uCurrentStock').value = '';
-    document.getElementById('uAddStock').value = '';
-}
+    function prepareUpdateStock() {
+        document.getElementById('uSearchInput').value = ''; 
+        renderProductOptions(); 
+        document.getElementById('uCurrentStock').value = '';
+        document.getElementById('uAddStock').value = '';
+    }
 
-    // FUNGSI BARU: Menampilkan stok saat ini ketika barang dipilih
     function showCurrentStock() {
         const id = document.getElementById('uProductId').value;
         if(!id) {
@@ -928,7 +940,6 @@ function renderProductOptions() {
         }
     }
 
-    // FUNGSI BARU: Proses submit data ke Google Apps Script
     async function submitUpdateStock(e) {
         e.preventDefault();
         const id = parseInt(document.getElementById('uProductId').value);
@@ -961,7 +972,7 @@ function renderProductOptions() {
             
             if (result.status === "success") { 
                 products[productIndex].stock = newStock;
-                renderProducts(); // Render ulang kartu produk
+                renderProducts(); 
                 
                 document.getElementById('updateStockForm').reset(); 
                 bootstrap.Modal.getInstance(document.getElementById('updateStockModal')).hide(); 
@@ -976,83 +987,38 @@ function renderProductOptions() {
             toggleLoader(false); 
         }
     }
-	// Fungsi untuk menyiapkan opsi barang saat modal Update dibuka
-function prepareUpdateStock() {
-    const select = document.getElementById('uProductId');
-    select.innerHTML = '<option value="">-- Pilih Barang --</option>';
-    
-    // Urutkan alfabetis agar mudah dicari
-    const sortedProducts = [...products].sort((a, b) => a.name.localeCompare(b.name));
-    
-    sortedProducts.forEach(p => {
-        select.innerHTML += `<option value="${p.id}">${p.name} (Stok: ${p.stock})</option>`;
-    });
-    
-    document.getElementById('uCurrentStock').value = '';
-    document.getElementById('uAddStock').value = '';
-}
 
-// Menampilkan stok saat ini ketika barang dipilih
-function showCurrentStock() {
-    const id = document.getElementById('uProductId').value;
-    if(!id) {
-        document.getElementById('uCurrentStock').value = '';
-        return;
-    }
-    const product = products.find(p => p.id == id);
-    if(product) {
-        document.getElementById('uCurrentStock').value = product.stock;
-    }
-}
+    // --- FUNGSI BARU: PENJUALAN BEBAS ---
+    function submitCustomSale(e) {
+        e.preventDefault();
+        const name = document.getElementById('cName').value;
+        const price = parseFloat(document.getElementById('cPrice').value);
+        const qty = parseInt(document.getElementById('cQty').value);
 
-// Proses submit data ke Google Apps Script
-async function submitUpdateStock(e) {
-    e.preventDefault();
-    const id = parseInt(document.getElementById('uProductId').value);
-    const addedStock = parseInt(document.getElementById('uAddStock').value);
-    
-    if(!id || isNaN(addedStock) || addedStock <= 0) return;
-    
-    const productIndex = products.findIndex(p => p.id === id);
-    if(productIndex === -1) return;
-    
-    const currentStock = products[productIndex].stock;
-    const newStock = currentStock + addedStock;
-    
-    toggleLoader(true, "MENGUPDATE STOK KE SERVER...");
-    
-    try {
-        const payload = {
-            action: "updateStock", 
-            product: { 
-                id: products[productIndex].id,
-                newStock: newStock
-            }
-        };
-        
-        const response = await fetch(WEB_APP_URL, { 
-            method: "POST", 
-            body: JSON.stringify(payload) 
-        });
-        const result = await response.json();
-        
-        if (result.status === "success") { 
-            products[productIndex].stock = newStock;
-            renderProducts(); // Render ulang kartu produk
-            
-            document.getElementById('updateStockForm').reset(); 
-            bootstrap.Modal.getInstance(document.getElementById('updateStockModal')).hide(); 
-            
-            Swal.fire({ title: 'STOK DIUPDATE!', text: `Stok baru: ${newStock}`, icon: 'success', timer: 2000, showConfirmButton: false, background: 'rgba(15,23,42,0.9)', color: '#fff' }); 
-        } else { 
-            Swal.fire({title: 'Gagal', text: result.message, icon:'error', background: 'rgba(15,23,42,0.9)', color: '#fff'}); 
+        if (!name || isNaN(price) || isNaN(qty) || qty <= 0) return;
+
+        const customId = 'custom_' + Date.now();
+        const existingItem = cart.find(item => item.name === name && item.price === price && item.isCustom);
+
+        if (existingItem) {
+            existingItem.qty += qty;
+        } else {
+            cart.push({
+                id: customId,
+                name: name,
+                price: price,
+                qty: qty,
+                isCustom: true // Penanda penting agar stok database tidak dikurangi
+            });
         }
-    } catch (error) { 
-        Swal.fire({title: 'Error Koneksi', text:'Jaringan terputus, gagal mengupdate stok.', icon:'error', background: 'rgba(15,23,42,0.9)', color: '#fff'}); 
-    } finally { 
-        toggleLoader(false); 
+
+        updateCart();
+        
+        document.getElementById('customSaleForm').reset();
+        bootstrap.Modal.getInstance(document.getElementById('customSaleModal')).hide();
+        
+        Swal.fire({ title: 'DITAMBAHKAN!', text: `${name} masuk sesi.`, toast: true, position: 'top-end', icon: 'success', showConfirmButton: false, timer: 2000, background: 'rgba(15,23,42,0.9)', color: '#fff' });
     }
-}
 </script>
 </body>
 </html>
