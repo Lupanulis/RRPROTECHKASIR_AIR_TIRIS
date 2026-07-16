@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -434,6 +433,40 @@
 </div>
 
 <!-- MODAL UPDATE STOK -->
+<!-- MODAL UPDATE STOK -->
+<div class="modal fade" id="updateStockModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-4 py-3" style="border-bottom: 1px solid var(--neon-gold);">
+                <h5 class="modal-title fw-bold text-glow-gold" style="letter-spacing: 1px;"><i class="bi bi-box-seam me-2"></i>Update Stok Barang</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="updateStockForm" onsubmit="submitUpdateStock(event)">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">CARI BARANG</label>
+                        <!-- KOTAK PENCARIAN BARU -->
+                        <input type="text" id="uSearchInput" class="form-control mb-2" placeholder="🔍 Ketik nama barang..." oninput="renderProductOptions()">
+                        
+                        <select id="uProductId" class="form-select" required onchange="showCurrentStock()">
+                            <option value="">-- Pilih Barang --</option>
+                        </select>
+                    </div>
+                    <!-- ... sisanya sama seperti kode sebelumnya ... -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">STOK SAAT INI</label>
+                        <input type="number" id="uCurrentStock" class="form-control fw-bold" style="background: transparent !important;" readonly disabled>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted" style="font-size:11px; letter-spacing:1px;">TAMBAH STOK BARU (+)</label>
+                        <input type="number" id="uAddStock" class="form-control fw-bold text-glow-cyan" required min="1" placeholder="Masukkan jumlah stok tambahan" style="font-size: 18px; background: transparent !important;">
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100 py-3 fw-bold fs-6 text-dark" style="letter-spacing: 1px;"><i class="bi bi-cloud-arrow-up-fill me-2"></i>SINKRONISASI UPDATE KE SERVER</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="updateStockModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -849,20 +882,38 @@
     let html5QrcodeScanner = null; function startScanner() { const readerDiv = document.getElementById('reader'); readerDiv.style.display = readerDiv.style.display === 'block' ? 'none' : 'block'; if(!html5QrcodeScanner && readerDiv.style.display === 'block') { html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 }); html5QrcodeScanner.render((decodedText) => { const p = products.find(x => x.barcode === decodedText); if(p) { addToCart(p.id); Swal.fire({title:'TERDETEKSI!', toast:true, position:'top-end', icon:'success', timer:1000, showConfirmButton:false, background: 'rgba(15,23,42,0.9)', color: '#fff'}); } else { Swal.fire({title:'KODE TIDAK VALID', toast:true, position:'top-end', icon:'error', timer:1500, showConfirmButton:false, background: 'rgba(15,23,42,0.9)', color: '#fff'}); } }, () => {}); } }
 
     // FUNGSI BARU: Persiapan Modal Update Stok
-    function prepareUpdateStock() {
-        const select = document.getElementById('uProductId');
-        select.innerHTML = '<option value="">-- Pilih Barang --</option>';
-        
-        // Urutkan alfabetis agar mudah dicari
-        const sortedProducts = [...products].sort((a, b) => a.name.localeCompare(b.name));
-        
-        sortedProducts.forEach(p => {
-            select.innerHTML += `<option value="${p.id}">${p.name} (Stok: ${p.stock})</option>`;
-        });
-        
-        document.getElementById('uCurrentStock').value = '';
-        document.getElementById('uAddStock').value = '';
+    // Fungsi baru untuk merender daftar barang berdasarkan filter pencarian
+function renderProductOptions() {
+    const query = document.getElementById('uSearchInput').value.toLowerCase();
+    const select = document.getElementById('uProductId');
+    
+    // Simpan nilai pilihan sebelumnya jika ada
+    const currentValue = select.value;
+    
+    // Filter produk
+    const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+    
+    // Reset dropdown
+    select.innerHTML = '<option value="">-- Pilih Barang --</option>';
+    
+    filtered.forEach(p => {
+        select.innerHTML += `<option value="${p.id}">${p.name} (Stok: ${p.stock})</option>`;
+    });
+
+    // Kembalikan pilihan jika ada dalam hasil filter (opsional)
+    if(filtered.find(p => p.id == currentValue)) {
+        select.value = currentValue;
     }
+}
+
+	// Fungsi prepareUpdateStock yang diupdate
+	function prepareUpdateStock() {
+    document.getElementById('uSearchInput').value = ''; // Reset pencarian
+    renderProductOptions(); // Jalankan render awal
+    
+    document.getElementById('uCurrentStock').value = '';
+    document.getElementById('uAddStock').value = '';
+}
 
     // FUNGSI BARU: Menampilkan stok saat ini ketika barang dipilih
     function showCurrentStock() {
