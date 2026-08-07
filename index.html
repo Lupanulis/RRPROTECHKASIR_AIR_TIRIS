@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -14,9 +13,10 @@
     <style>
         :root {
             --bg-main: #030712;
-            --glass-bg: rgba(17, 24, 39, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-input: rgba(255, 255, 255, 0.03);
+            --solid-bg: #111827;
+            --solid-card: #1f2937;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-input: rgba(255, 255, 255, 0.05);
             --neon-cyan: #00f2fe;
             --neon-blue: #4facfe;
             --neon-gold: #fbbf24;
@@ -26,21 +26,13 @@
             --text-muted: #94a3b8;
         }
 
-        /* ANIMATED BACKGROUND */
+        /* BACKGROUND BIASA (TANPA ANIMASI) */
         body {
-            background: linear-gradient(-45deg, #030712, #1e1b4b, #020617, #0f172a);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: #0f172a;
             color: var(--text-main);
             font-family: 'Space Grotesk', sans-serif;
             font-size: 14px;
             min-height: 100vh;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -48,17 +40,15 @@
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
 
-        /* ULTRA GLASSMORPHISM CARDS */
+        /* KARTU SOLID (TANPA GLASSMORPHISM/BLUR) */
         .card, .modal-content, .login-box, .nav-menu {
-            background: var(--glass-bg) !important;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: var(--solid-bg) !important;
             border: 1px solid var(--glass-border) !important;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             border-radius: 16px;
         }
         
-        /* GLASS INPUTS */
+        /* INPUT BIASA */
         .form-control, .form-select { 
             background: var(--glass-input) !important; 
             color: var(--text-main) !important; 
@@ -66,115 +56,85 @@
             border-radius: 10px; 
             padding: 10px 14px; 
             font-size: 13px; 
-            transition: all 0.3s ease; 
         }
         .form-control:focus, .form-select:focus { 
             background: rgba(0, 242, 254, 0.05) !important; 
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); 
             border-color: var(--neon-cyan); 
+            box-shadow: none;
         }
-		/* --- PERBAIKAN WARNA PUTIH PADA DROPDOWN & AUTOFILL --- */
         
-        /* Mengubah daftar pilihan (dropdown) menjadi gelap senada dengan tema */
         select option {
-            background-color: #0f172a !important; /* Warna navy gelap bawaan tema */
+            background-color: #0f172a !important; 
             color: var(--text-main) !important;
         }
 
-        /* Menghilangkan background putih saat browser melakukan Autofill */
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
         select:-webkit-autofill,
         select:-webkit-autofill:hover,
         select:-webkit-autofill:focus {
-            -webkit-box-shadow: 0 0 0px 1000px #030712 inset !important; /* Menutup warna putih autofill */
-            transition: background-color 5000s ease-in-out 0s;
+            -webkit-box-shadow: 0 0 0px 1000px #030712 inset !important;
             -webkit-text-fill-color: #fff !important;
         }
         .form-control::placeholder { color: #64748b; }
         .input-group-text { background: var(--glass-input); border: 1px solid var(--glass-border); color: var(--text-muted); }
 
-        /* NEON BUTTONS */
-        .btn { border-radius: 10px; font-weight: 600; font-size: 13px; padding: 10px 16px; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn-primary { 
-            background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-blue) 100%); 
-            color: #000 !important; 
-            border: none; 
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); 
-        }
-        .btn-primary:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.7); 
-        }
-        .btn-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
-        .btn-success:hover { box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); transform: translateY(-2px); }
-        .btn-light { background: var(--glass-input); color: var(--text-main); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
-        .btn-light:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); }
-        .btn-warning { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); border: none; box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
-        .btn-warning:hover { box-shadow: 0 0 25px rgba(251, 191, 36, 0.6); transform: translateY(-2px); }
-        .btn-info { background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); border: none; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
-        .btn-info:hover { box-shadow: 0 0 25px rgba(0, 242, 254, 0.6); transform: translateY(-2px); }
+        /* BUTTONS (TANPA EFEK HOVER NAIK/TRANSFORM) */
+        .btn { border-radius: 10px; font-weight: 600; font-size: 13px; padding: 10px 16px; text-transform: uppercase; }
+        .btn-primary { background: var(--neon-cyan); color: #000 !important; border: none; }
+        .btn-primary:hover { background: var(--neon-blue); }
+        .btn-success { background: #10b981; border: none; color: #fff;}
+        .btn-success:hover { background: #059669; }
+        .btn-light { background: var(--glass-input); color: var(--text-main); border: 1px solid var(--glass-border); }
+        .btn-light:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--neon-cyan); }
+        .btn-warning { background: #fbbf24; border: none; color: #000;}
+        .btn-warning:hover { background: #f59e0b; }
+        .btn-info { background: #00f2fe; border: none; color: #000;}
+        .btn-info:hover { background: #4facfe; }
         
-        /* NEON BADGES */
-        .badge-baru { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid #34d399; padding: 5px 10px; border-radius: 8px; font-weight: 700; text-shadow: 0 0 5px #34d399; }
-        .badge-seken { background: rgba(251, 191, 36, 0.1); color: #fbbf24; border: 1px solid #fbbf24; padding: 5px 10px; border-radius: 8px; font-weight: 700; text-shadow: 0 0 5px #fbbf24; }
-        .badge-aksesoris { background: rgba(0, 242, 254, 0.1); color: var(--neon-cyan); border: 1px solid var(--neon-cyan); padding: 5px 10px; border-radius: 8px; font-weight: 700; text-shadow: 0 0 5px var(--neon-cyan); }
-        .badge-voucher { background: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid #c084fc; padding: 5px 10px; border-radius: 8px; font-weight: 700; text-shadow: 0 0 5px #c084fc; }
-        .badge-atk { background: rgba(255, 8, 68, 0.1); color: #ff4d79; border: 1px solid #ff4d79; padding: 5px 10px; border-radius: 8px; font-weight: 700; text-shadow: 0 0 5px #ff4d79; }
+        /* BADGES */
+        .badge-baru { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid #34d399; padding: 5px 10px; border-radius: 8px; font-weight: 700; }
+        .badge-seken { background: rgba(251, 191, 36, 0.1); color: #fbbf24; border: 1px solid #fbbf24; padding: 5px 10px; border-radius: 8px; font-weight: 700; }
+        .badge-aksesoris { background: rgba(0, 242, 254, 0.1); color: var(--neon-cyan); border: 1px solid var(--neon-cyan); padding: 5px 10px; border-radius: 8px; font-weight: 700; }
+        .badge-voucher { background: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid #c084fc; padding: 5px 10px; border-radius: 8px; font-weight: 700; }
+        .badge-atk { background: rgba(255, 8, 68, 0.1); color: #ff4d79; border: 1px solid #ff4d79; padding: 5px 10px; border-radius: 8px; font-weight: 700; }
 
-        /* FLOATING 3D PRODUCT CARDS */
-        .product-card { cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
-        .product-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            opacity: 0; transition: opacity 0.4s; pointer-events: none;
-        }
-        .product-card:hover { 
-            transform: translateY(-8px) scale(1.02); 
-            border-color: var(--neon-cyan) !important; 
-            box-shadow: 0 15px 30px rgba(0, 242, 254, 0.2), inset 0 0 15px rgba(0, 242, 254, 0.1); 
-            z-index: 10;
-        }
-        .product-card:hover::before { opacity: 1; }
+        /* PRODUCT CARDS (TANPA ANIMASI 3D) */
+        .product-card { cursor: pointer; position: relative; overflow: hidden; background: var(--solid-card); border-radius: 12px; border: 1px solid var(--glass-border); }
+        .product-card:hover { border-color: var(--neon-cyan) !important; background: #2d3748;}
         
-        @keyframes pulseAlert { 0% { box-shadow: 0 0 0 0 rgba(255, 8, 68, 0.6); } 70% { box-shadow: 0 0 0 10px rgba(255, 8, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 8, 68, 0); } }
-        .stock-badge { position: absolute; top: 12px; right: 12px; font-size: 11px; padding: 4px 10px; border-radius: 8px; font-weight: 800; border: 1px solid var(--glass-border); z-index: 10; backdrop-filter: blur(5px);}
-        .stock-low { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border-color: #fbbf24; text-shadow: 0 0 5px #fbbf24; }
-        .stock-empty { background: rgba(255, 8, 68, 0.2); color: #ff4d79; border-color: #ff4d79; animation: pulseAlert 1.5s infinite; text-shadow: 0 0 5px #ff4d79; }
-        .stock-normal { background: var(--glass-input); color: var(--text-muted); }
+        .stock-badge { position: absolute; top: 12px; right: 12px; font-size: 11px; padding: 4px 10px; border-radius: 8px; font-weight: 800; border: 1px solid var(--glass-border); z-index: 10; background: var(--solid-bg);}
+        .stock-low { color: #fbbf24; border-color: #fbbf24; }
+        .stock-empty { color: #ff4d79; border-color: #ff4d79; } /* ANIMASI PULSE DIHAPUS */
+        .stock-normal { color: var(--text-muted); }
 
         .nav-menu { padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 15px; z-index: 1000; margin: 15px 15px 25px 15px; border-radius: 20px;}
-        .menu-btn { background: transparent; color: var(--text-muted); border: none; padding: 10px 20px; border-radius: 12px; margin-right: 8px; font-weight: 600; font-size: 14px; transition: 0.3s;}
-        .menu-btn.active { background: rgba(0, 242, 254, 0.1); color: var(--neon-cyan); border: 1px solid rgba(0, 242, 254, 0.3); text-shadow: 0 0 8px rgba(0, 242, 254, 0.5); }
+        .menu-btn { background: transparent; color: var(--text-muted); border: none; padding: 10px 20px; border-radius: 12px; margin-right: 8px; font-weight: 600; font-size: 14px;}
+        .menu-btn.active { background: rgba(0, 242, 254, 0.1); color: var(--neon-cyan); border: 1px solid rgba(0, 242, 254, 0.3); }
         .menu-btn:hover:not(.active) { background: var(--glass-input); color: var(--text-main); }
 
         #loginPage { height: 100vh; display: flex; align-items: center; justify-content: center; }
         .login-box { padding: 50px 40px; width: 100%; max-width: 420px; text-align: center; border-radius: 24px; position: relative; overflow: hidden; }
-        .login-box::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            animation: shine 3s infinite; pointer-events: none;
-        }
-        @keyframes shine { 100% { left: 200%; } }
+        /* EFEK SHINE PADA LOGIN BOX DIHAPUS */
 
         .table-custom th { border-bottom: 1px solid var(--neon-cyan); color: var(--neon-cyan); font-size: 12px; font-weight: 700; padding: 16px 12px; text-transform: uppercase; letter-spacing: 1px; }
         .table-custom td { border-bottom: 1px solid var(--glass-border); padding: 16px 12px; vertical-align: middle; font-size: 13px; color: var(--text-main); }
 
-        .cart-summary-box { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 14px; padding: 16px; margin-bottom: 16px; backdrop-filter: blur(10px); }
+        .cart-summary-box { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
         
         /* CHIP FILTERS */
-        .chip-btn { border-radius: 12px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--glass-border); background: var(--glass-input); color: var(--text-muted); white-space: nowrap; transition: 0.3s;}
-        .chip-btn.active { background: var(--neon-cyan); color: #000; border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
+        .chip-btn { border-radius: 12px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--glass-border); background: var(--glass-input); color: var(--text-muted); white-space: nowrap;}
+        .chip-btn.active { background: var(--neon-cyan); color: #000; border-color: var(--neon-cyan); }
         .chip-btn:hover:not(.active) { border-color: var(--neon-cyan); color: var(--neon-cyan); }
         
-        .list-group-item { background: var(--glass-input) !important; border: 1px solid var(--glass-border) !important; margin-bottom: 8px; border-radius: 12px !important; backdrop-filter: blur(5px);}
+        .list-group-item { background: var(--glass-input) !important; border: 1px solid var(--glass-border) !important; margin-bottom: 8px; border-radius: 12px !important;}
 
-        #loaderOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.9); backdrop-filter: blur(15px); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        #loaderOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
         
-        /* GLOWING TEXT EFFECT */
-        .text-glow-gold { color: var(--neon-gold); text-shadow: 0 0 10px rgba(251, 191, 36, 0.5); }
-        .text-glow-cyan { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 242, 254, 0.5); }
+        /* TEXT */
+        .text-glow-gold { color: var(--neon-gold); }
+        .text-glow-cyan { color: var(--neon-cyan); }
 
         /* RECEIPT - MUST BE WHITE FOR THERMAL PRINTER */
         #receiptPage { display: none; background: white; color: black; padding: 25px; font-family: 'Courier New', monospace; width: 80mm; margin: 0 auto; }
@@ -182,7 +142,7 @@
         .btn-close { filter: invert(1); }
 
         @media print { 
-            body { background: white !important; animation: none; }
+            body { background: white !important; }
             body * { visibility: hidden; } 
             #receiptPage, #receiptPage * { visibility: visible; } 
             #receiptPage { position: absolute; left: 0; top: 0; width: 100%; background: white;} 
